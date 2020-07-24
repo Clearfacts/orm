@@ -23,6 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\Cache\Persister\CachedPersister;
+use Doctrine\ORM\Event\CommitFailedEventArgs;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\ListenersInvoker;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -426,6 +427,7 @@ class UnitOfWork implements PropertyChangedListener
 
             $conn->commit();
         } catch (Throwable $e) {
+            $this->evm->dispatchEvent('onCommitFailure', new CommitFailedEventArgs($this->em, $e->getMessage()));
             $this->em->close();
             $conn->rollBack();
 
