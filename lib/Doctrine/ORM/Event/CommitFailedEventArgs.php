@@ -16,18 +16,18 @@ class CommitFailedEventArgs extends EventArgs
     /**
      * @var string
      */
-    private $exceptionMessage;
+    private $originalException;
 
     /**
      * Constructor.
      *
      * @param EntityManagerInterface $em
-     * @param string                 $exceptionMessage
+     * @param \Throwable             $exception
      */
-    public function __construct(EntityManagerInterface $em, string $exceptionMessage)
+    public function __construct(EntityManagerInterface $em, \Throwable $exception)
     {
         $this->em = $em;
-        $this->exceptionMessage = $exceptionMessage;
+        $this->originalException = $exception;
     }
 
     /**
@@ -38,8 +38,8 @@ class CommitFailedEventArgs extends EventArgs
         return $this->em;
     }
 
-    public function getOriginalExceptionMessage()
+    public function getOriginalException()
     {
-        return $this->exceptionMessage;
+        return $this->originalException;
     }
 }

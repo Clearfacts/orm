@@ -427,7 +427,7 @@ class UnitOfWork implements PropertyChangedListener
 
             $conn->commit();
         } catch (Throwable $e) {
-            $this->evm->dispatchEvent('onCommitFailure', new CommitFailedEventArgs($this->em, $e->getMessage()));
+            $this->evm->dispatchEvent('onCommitFailure', new CommitFailedEventArgs($this->em, $e));
             $this->em->close();
             $conn->rollBack();
 
